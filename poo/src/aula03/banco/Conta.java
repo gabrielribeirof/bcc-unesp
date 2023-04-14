@@ -10,7 +10,7 @@ public class Conta {
     }
     
     public void sacar(float valor) {
-        if (saldo <= 0) return;
+        if (saldo <= 0 || valor > saldo) return;
                 
         saldo = saldo - valor;
     }
