@@ -1,14 +1,14 @@
 package aula03.relogio;
 
 public class Main {
-    public static void main(String[] args) {
-        Relogio relogio1 = new Relogio(1, 0, 0);
-        
-        relogio1.print();
-        relogio1.printEmSegundos();
+	public static void main(String[] args) {
+		Relogio relogio1 = new Relogio(1, 0, 0);
 
-        Relogio relogio2 = new Relogio();
+		relogio1.exibir();
+		relogio1.calcularSegundos();
 
-        relogio2.print();
-    }
+		Relogio relogio2 = new Relogio();
+
+		relogio2.exibir();
+	}
 }
