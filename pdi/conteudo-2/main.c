@@ -11,7 +11,10 @@ const struct option options[] = {
   {"rotate90", no_argument, 0, 0},
   {"rotate180", no_argument, 0, 0},
   {"rotate270", no_argument, 0, 0},
-  {"mirror", no_argument, 0, 'm'}
+  {"mirrorh", no_argument, 0, 'h'},
+  {"mirrorw", no_argument, 0, 'w'},
+  {"binarization", required_argument, 0, 'i'},
+  {"middleGrayLevel", required_argument, 0, 'g'},
 };
 
 void getArguments(int argc, char *argv[], char **operation, int *p) {
@@ -44,8 +47,19 @@ void getArguments(int argc, char *argv[], char **operation, int *p) {
       case 'n':
         *operation = "negative";
         break;
-      case 'm':
-        *operation = "mirror";
+      case 'h':
+        *operation = "mirrorh";
+        break;
+      case 'w':
+        *operation = "mirrorw";
+        break;
+      case 'i':
+        *operation = "binarization";
+        *p = atoi(optarg);
+        break;
+      case 'g':
+        *operation = "middleGrayLevel";
+        *p = atoi(optarg);
         break;
       case 0:
         if (strcmp(options[option_index].name, "rotate90") == 0) {
@@ -112,8 +126,14 @@ int main(int argc, char *argv[]) {
     rotate180(image, rows, columns, maxGray);
   } else if (strcmp(operation, "rotate270") == 0) {
     rotate270(image, rows, columns, maxGray);
-  } else if (strcmp(operation, "mirror") == 0) {
-    mirror(image, rows, columns, maxGray);
+  } else if (strcmp(operation, "mirrorh") == 0) {
+    mirrorh(image, rows, columns, maxGray);
+  } else if (strcmp(operation, "mirrorw") == 0) {
+    mirrorw(image, rows, columns, maxGray);
+  } else if (strcmp(operation, "binarization") == 0) {
+    binarization(image, rows, columns, maxGray, p);
+  } else if (strcmp(operation, "middleGrayLevel") == 0) {
+    middleGrayLevel(image, rows, columns, maxGray, p);
   } else {
     printf("Operação inválida\n");
   }

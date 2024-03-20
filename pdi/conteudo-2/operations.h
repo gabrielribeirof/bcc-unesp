@@ -9,7 +9,10 @@ void negative(FILE * image, int rows, int columns, int maxGray);
 void rotate90(FILE * image, int rows, int columns, int maxGray);
 void rotate180(FILE * image, int rows, int columns, int maxGray);
 void rotate270(FILE * image, int rows, int columns, int maxGray);
-void mirror(FILE * image, int rows, int columns, int maxGray);
+void mirrorh(FILE * image, int rows, int columns, int maxGray);
+void mirrorw(FILE * image, int rows, int columns, int maxGray);
+void binarization(FILE * image, int rows, int columns, int maxGray, int k);
+void middleGrayLevel(FILE * image, int rows, int columns, int maxGray, int l);
 
 typedef struct {
   char * name;

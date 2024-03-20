@@ -1,4 +1,5 @@
 #include "operations.h"
+#include<math.h>
 
 void darken(FILE * image, int rows, int columns, int maxGray, int p) {
   FILE * darkenImage = fopen("output/lena256-escurecido.pgm", "w");
@@ -124,8 +125,8 @@ void rotate270(FILE * image, int rows, int columns, int maxGray) {
   fclose(rotate90Image);
 }
 
-void mirror(FILE * image, int rows, int columns, int maxGray) {
-  FILE * mirrorImage = fopen("output/lena256-espelhado.pgm", "w");
+void mirrorh(FILE * image, int rows, int columns, int maxGray) {
+  FILE * mirrorImage = fopen("output/lena256-espelhado-horizontal.pgm", "w");
   fprintf(mirrorImage, "P2\n%d %d\n%d\n", rows, columns, maxGray);
 
   int element;
@@ -144,4 +145,72 @@ void mirror(FILE * image, int rows, int columns, int maxGray) {
   }
 
   fclose(mirrorImage);
+}
+
+void mirrorw(FILE * image, int rows, int columns, int maxGray) {
+  FILE * mirrorImage = fopen("output/lena256-espelhado-vertical.pgm", "w");
+  fprintf(mirrorImage, "P2\n%d %d\n%d\n", rows, columns, maxGray);
+
+  int element;
+  int imageMatrix[rows][columns];
+  for (int i=0; i<rows; i++) {
+    for (int j=0; j<columns; j++) {
+      fscanf(image, "%d", &element);
+      imageMatrix[i][j] = element;
+    }
+  }
+
+  for (int i=rows-1; i>=0; i--) {
+    for (int j=0; j<columns; j++) {
+      fprintf(mirrorImage, "%d\n", imageMatrix[i][j]);
+    }
+  }
+
+  fclose(mirrorImage);
+}
+
+void binarization(FILE * image, int rows, int columns, int maxGray, int l) {
+  FILE * binarizationImage = fopen("output/lena256-binario.pgm", "w");
+  fprintf(binarizationImage, "P2\n%d %d\n%d\n", rows, columns, maxGray);
+
+  int element;
+  for (int i=0; i<rows; i++) {
+    for (int j=0; j<columns; j++) {
+      fscanf(image, "%d", &element);
+      if (element >= l) {
+        fprintf(binarizationImage, "%d\n", maxGray);
+      } else {
+        fprintf(binarizationImage, "0\n");
+      }
+    }
+  }
+
+  fclose(binarizationImage);
+}
+
+void middleGrayLevel(FILE * image, int rows, int columns, int maxGray, int l) {
+  if (l > maxGray) {
+    printf("Nível de cinza médio deve ser menor ou igual ao nível de cinza máximo\n");
+    return;
+  }
+
+  if (maxGray+1 % l != 0) {
+    printf("Nível de cinza máximo deve ser divisível pelo nível de cinza médio\n");
+    return;
+  }
+
+  int range = maxGray+1 / l;
+
+  FILE * middleGrayLevelImage = fopen("output/lena256-nivel-cinza-medio.pgm", "w");
+  fprintf(middleGrayLevelImage, "P2\n%d %d\n%d\n", rows, columns, maxGray);
+
+  int element;
+  for (int i=0; i<rows; i++) {
+    for (int j=0; j<columns; j++) {
+      fscanf(image, "%d", &element);
+      fprintf(middleGrayLevelImage, "%d\n", (element / range) * range);
+    }
+  }
+
+  fclose(middleGrayLevelImage);
 }
