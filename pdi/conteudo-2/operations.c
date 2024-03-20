@@ -63,10 +63,17 @@ void rotate90(FILE * image, int rows, int columns, int maxGray) {
   fprintf(rotate90Image, "P2\n%d %d\n%d\n", columns, rows, maxGray);
 
   int element;
-  for (int i=0; i<columns; i++) {
-    for (int j=0; j<rows; j++) {
+  int imageMatrix[rows][columns];
+  for (int i=0; i<rows; i++) {
+    for (int j=0; j<columns; j++) {
       fscanf(image, "%d", &element);
-      fprintf(rotate90Image, "%d\n", element);
+      imageMatrix[i][j] = element;
+    }
+  }
+
+  for (int i=columns-1; i>=0; i--) {
+    for (int j=0; j<rows; j++) {
+      fprintf(rotate90Image, "%d\n", imageMatrix[j][i]);
     }
   }
 
@@ -78,10 +85,17 @@ void rotate180(FILE * image, int rows, int columns, int maxGray) {
   fprintf(rotate180Image, "P2\n%d %d\n%d\n", rows, columns, maxGray);
 
   int element;
+  int imageMatrix[rows][columns];
   for (int i=0; i<rows; i++) {
     for (int j=0; j<columns; j++) {
       fscanf(image, "%d", &element);
-      fprintf(rotate180Image, "%d\n", element);
+      imageMatrix[i][j] = element;
+    }
+  }
+
+  for (int i=rows-1; i>=0; i--) {
+    for (int j=columns-1; j>=0; j--) {
+      fprintf(rotate180Image, "%d\n", imageMatrix[i][j]);
     }
   }
 
@@ -89,18 +103,25 @@ void rotate180(FILE * image, int rows, int columns, int maxGray) {
 }
 
 void rotate270(FILE * image, int rows, int columns, int maxGray) {
-  FILE * rotate270Image = fopen("output/lena256-rotacionado270.pgm", "w");
-  fprintf(rotate270Image, "P2\n%d %d\n%d\n", columns, rows, maxGray);
+  FILE * rotate90Image = fopen("output/lena256-rotacionado270.pgm", "w");
+  fprintf(rotate90Image, "P2\n%d %d\n%d\n", columns, rows, maxGray);
 
   int element;
-  for (int i=0; i<columns; i++) {
-    for (int j=0; j<rows; j++) {
+  int imageMatrix[rows][columns];
+  for (int i=0; i<rows; i++) {
+    for (int j=0; j<columns; j++) {
       fscanf(image, "%d", &element);
-      fprintf(rotate270Image, "%d\n", element);
+      imageMatrix[i][j] = element;
     }
   }
 
-  fclose(rotate270Image);
+  for (int i=0; i<columns; i++) {
+    for (int j=rows-1; j>=0; j--) {
+      fprintf(rotate90Image, "%d\n", imageMatrix[j][i]);
+    }
+  }
+
+  fclose(rotate90Image);
 }
 
 void mirror(FILE * image, int rows, int columns, int maxGray) {
@@ -108,10 +129,17 @@ void mirror(FILE * image, int rows, int columns, int maxGray) {
   fprintf(mirrorImage, "P2\n%d %d\n%d\n", rows, columns, maxGray);
 
   int element;
+  int imageMatrix[rows][columns];
   for (int i=0; i<rows; i++) {
     for (int j=0; j<columns; j++) {
       fscanf(image, "%d", &element);
-      fprintf(mirrorImage, "%d\n", element);
+      imageMatrix[i][j] = element;
+    }
+  }
+
+  for (int i=0; i<rows; i++) {
+    for (int j=columns-1; j>=0; j--) {
+      fprintf(mirrorImage, "%d\n", imageMatrix[i][j]);
     }
   }
 
