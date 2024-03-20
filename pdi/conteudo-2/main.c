@@ -4,17 +4,17 @@
 #include<getopt.h>
 #include"operations.h"
 
-void getArguments(int argc, char *argv[], char *operation, int *p) {
-  const struct option options[] = {
-    {"darken", required_argument, 0, 'd'},
-    {"brighten", required_argument, 0, 'b'},
-    {"negative", no_argument, 0, 'n'},
-    {"rotate90", no_argument, 0, 0},
-    {"rotate180", no_argument, 0, 0},
-    {"rotate270", no_argument, 0, 0},
-    {"mirror", no_argument, 0, 'm'}
-  };
+const struct option options[] = {
+  {"darken", required_argument, 0, 'd'},
+  {"brighten", required_argument, 0, 'b'},
+  {"negative", no_argument, 0, 'n'},
+  {"rotate90", no_argument, 0, 0},
+  {"rotate180", no_argument, 0, 0},
+  {"rotate270", no_argument, 0, 0},
+  {"mirror", no_argument, 0, 'm'}
+};
 
+void getArguments(int argc, char *argv[], char **operation, int *p) {
   char short_options[20];
   int short_options_index = -1;
   for (int i = 0; i < 7; i++) {
@@ -34,26 +34,26 @@ void getArguments(int argc, char *argv[], char *operation, int *p) {
   while ((opt = getopt_long(argc, argv, short_options, options, &option_index)) != -1) {
     switch (opt) {
       case 'd':
-        operation = "darken";
+        *operation = "darken";
         *p = atoi(optarg);
         break;
       case 'b':
-        operation = "brighten";
+        *operation = "brighten";
         *p = atoi(optarg);
         break;
       case 'n':
-        operation = "negative";
+        *operation = "negative";
         break;
       case 'm':
-        operation = "mirror";
+        *operation = "mirror";
         break;
       case 0:
         if (strcmp(options[option_index].name, "rotate90") == 0) {
-          operation = "rotate90";
+          *operation = "rotate90";
         } else if (strcmp(options[option_index].name, "rotate180") == 0) {
-          operation = "rotate180";
+          *operation = "rotate180";
         } else if (strcmp(options[option_index].name, "rotate270") == 0) {
-          operation = "rotate270";
+          *operation = "rotate270";
         }
         break;
     }
@@ -74,14 +74,19 @@ void loadInputImage(FILE * image, int *rows, int *columns, int *maxGray) {
 }
 
 int main(int argc, char *argv[]) {
+  // Pode ser: darken, brighten, negative, rotate90, rotate180, rotate270, mirror
   char * operation = "\0";
+  // Parâmetro para as operações darken e brighten
   int p = -1;
 
-  getArguments(argc, argv, operation, &p);
+  // Recebe os argumentos passados para o programa
+  getArguments(argc, argv, &operation, &p);
 
+  // Imprime os argumentos recebidos
   printf("p: %d\n", p);
   printf("operation: %s\n", operation);
 
+  // Abre a imagem de entrada e carrega as informações necessárias
   int rows, columns;
   int maxGray;
 
@@ -94,6 +99,7 @@ int main(int argc, char *argv[]) {
 
   loadInputImage(image, &rows, &columns, &maxGray);
 
+  // Encontra a operação a ser realizada e chama a função correspondente
   if (strcmp(operation, "darken") == 0) {
     darken(image, rows, columns, maxGray, p);
   } else if (strcmp(operation, "brighten") == 0) {

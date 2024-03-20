@@ -1,7 +1,7 @@
 #include "operations.h"
 
 void darken(FILE * image, int rows, int columns, int maxGray, int p) {
-  FILE * darkenImage = fopen("lena256-escurecido.pgm", "w");
+  FILE * darkenImage = fopen("output/lena256-escurecido.pgm", "w");
   fprintf(darkenImage, "P2\n%d %d\n%d\n", rows, columns, maxGray);
 
   int element, result;
@@ -22,7 +22,7 @@ void darken(FILE * image, int rows, int columns, int maxGray, int p) {
 }
 
 void brighten(FILE * image, int rows, int columns, int maxGray, int p) {
-  FILE * lightenImage = fopen("lena256-clareado.pgm", "w");
+  FILE * lightenImage = fopen("output/lena256-clareado.pgm", "w");
   fprintf(lightenImage, "P2\n%d %d\n%d\n", rows, columns, maxGray);
 
   int element, result;
@@ -43,7 +43,7 @@ void brighten(FILE * image, int rows, int columns, int maxGray, int p) {
 }
 
 void negative(FILE * image, int rows, int columns, int maxGray) {
-  FILE * negativeImage = fopen("lena256-negativo.pgm", "w");
+  FILE * negativeImage = fopen("output/lena256-negativo.pgm", "w");
   fprintf(negativeImage, "P2\n%d %d\n%d\n", rows, columns, maxGray);
 
   int element, result;
@@ -59,7 +59,7 @@ void negative(FILE * image, int rows, int columns, int maxGray) {
 }
 
 void rotate90(FILE * image, int rows, int columns, int maxGray) {
-  FILE * rotate90Image = fopen("lena256-rotacionado90.pgm", "w");
+  FILE * rotate90Image = fopen("output/lena256-rotacionado90.pgm", "w");
   fprintf(rotate90Image, "P2\n%d %d\n%d\n", columns, rows, maxGray);
 
   int element;
@@ -74,7 +74,7 @@ void rotate90(FILE * image, int rows, int columns, int maxGray) {
 }
 
 void rotate180(FILE * image, int rows, int columns, int maxGray) {
-  FILE * rotate180Image = fopen("lena256-rotacionado180.pgm", "w");
+  FILE * rotate180Image = fopen("output/lena256-rotacionado180.pgm", "w");
   fprintf(rotate180Image, "P2\n%d %d\n%d\n", rows, columns, maxGray);
 
   int element;
@@ -89,7 +89,7 @@ void rotate180(FILE * image, int rows, int columns, int maxGray) {
 }
 
 void rotate270(FILE * image, int rows, int columns, int maxGray) {
-  FILE * rotate270Image = fopen("lena256-rotacionado270.pgm", "w");
+  FILE * rotate270Image = fopen("output/lena256-rotacionado270.pgm", "w");
   fprintf(rotate270Image, "P2\n%d %d\n%d\n", columns, rows, maxGray);
 
   int element;
@@ -104,7 +104,7 @@ void rotate270(FILE * image, int rows, int columns, int maxGray) {
 }
 
 void mirror(FILE * image, int rows, int columns, int maxGray) {
-  FILE * mirrorImage = fopen("lena256-espelhado.pgm", "w");
+  FILE * mirrorImage = fopen("output/lena256-espelhado.pgm", "w");
   fprintf(mirrorImage, "P2\n%d %d\n%d\n", rows, columns, maxGray);
 
   int element;
