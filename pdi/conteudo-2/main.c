@@ -12,15 +12,17 @@ const struct option options[] = {
   {"rotate180", no_argument, 0, 0},
   {"rotate270", no_argument, 0, 0},
   {"mirrorh", no_argument, 0, 'h'},
-  {"mirrorw", no_argument, 0, 'w'},
+  {"mirrorv", no_argument, 0, 'v'},
   {"binarization", required_argument, 0, 'i'},
   {"middleGrayLevel", required_argument, 0, 'g'},
 };
 
 void getArguments(int argc, char *argv[], char **operation, int *p) {
-  char short_options[20];
+  int options_size = sizeof(options) / sizeof(options[0]);
+
+  char short_options[options_size];
   int short_options_index = -1;
-  for (int i = 0; i < 7; i++) {
+  for (int i = 0; i < options_size; i++) {
     if (options[i].val != 0) {
       short_options_index++;
       short_options[short_options_index] = options[i].val;
@@ -35,6 +37,7 @@ void getArguments(int argc, char *argv[], char **operation, int *p) {
   int opt;
   int option_index = 0;
   while ((opt = getopt_long(argc, argv, short_options, options, &option_index)) != -1) {
+    printf("opt: %c\n", opt);
     switch (opt) {
       case 'd':
         *operation = "darken";
@@ -50,8 +53,8 @@ void getArguments(int argc, char *argv[], char **operation, int *p) {
       case 'h':
         *operation = "mirrorh";
         break;
-      case 'w':
-        *operation = "mirrorw";
+      case 'v':
+        *operation = "mirrorv";
         break;
       case 'i':
         *operation = "binarization";
@@ -128,8 +131,8 @@ int main(int argc, char *argv[]) {
     rotate270(image, rows, columns, maxGray);
   } else if (strcmp(operation, "mirrorh") == 0) {
     mirrorh(image, rows, columns, maxGray);
-  } else if (strcmp(operation, "mirrorw") == 0) {
-    mirrorw(image, rows, columns, maxGray);
+  } else if (strcmp(operation, "mirrorv") == 0) {
+    mirrorv(image, rows, columns, maxGray);
   } else if (strcmp(operation, "binarization") == 0) {
     binarization(image, rows, columns, maxGray, p);
   } else if (strcmp(operation, "middleGrayLevel") == 0) {

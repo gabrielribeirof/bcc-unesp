@@ -147,7 +147,7 @@ void mirrorh(FILE * image, int rows, int columns, int maxGray) {
   fclose(mirrorImage);
 }
 
-void mirrorw(FILE * image, int rows, int columns, int maxGray) {
+void mirrorv(FILE * image, int rows, int columns, int maxGray) {
   FILE * mirrorImage = fopen("output/lena256-espelhado-vertical.pgm", "w");
   fprintf(mirrorImage, "P2\n%d %d\n%d\n", rows, columns, maxGray);
 
@@ -194,12 +194,12 @@ void middleGrayLevel(FILE * image, int rows, int columns, int maxGray, int l) {
     return;
   }
 
-  if (maxGray+1 % l != 0) {
+  if ((maxGray+1) % l != 0) {
     printf("Nível de cinza máximo deve ser divisível pelo nível de cinza médio\n");
     return;
   }
 
-  int range = maxGray+1 / l;
+  int range = (maxGray+1) / l;
 
   FILE * middleGrayLevelImage = fopen("output/lena256-nivel-cinza-medio.pgm", "w");
   fprintf(middleGrayLevelImage, "P2\n%d %d\n%d\n", rows, columns, maxGray);
