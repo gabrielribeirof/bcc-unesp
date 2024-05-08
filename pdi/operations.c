@@ -214,3 +214,65 @@ void middleGrayLevel(FILE * image, int rows, int columns, int maxGray, int l) {
 
   fclose(middleGrayLevelImage);
 }
+
+void highlight(FILE * image, int rows, int columns, int maxGray, int shouldReduceIntensityOutsideHighlightRange) {
+  FILE * highlightImage = fopen("output/lena256-destacado-com-reducao.pgm", "w");
+  fprintf(highlightImage, "P2\n%d %d\n%d\n", rows, columns, maxGray);
+
+  int a, b, t, r;
+
+  printf("Digite o valor A da faixa de destaque: ");
+  scanf("%d", &a);
+
+  if (a > maxGray || a < 0) {
+    printf("O valor A da faixa de destaque deve estar entre 0 e %d\n", maxGray);
+    return;
+  }
+
+  printf("Digite o valor B da faixa de destaque: ");
+  scanf("%d", &b);
+
+  if (b > maxGray || b < 0) {
+    printf("O valor B da faixa de destaque deve estar entre 0 e %d\n", maxGray);
+    return;
+  }
+
+  if (a > b) {
+    printf("A deve ser menor ou igual a B\n");
+    return;
+  }
+
+  printf("Digite o valor da cor da faixa de destaque: ");
+  scanf("%d", &t);
+
+  if (t > maxGray || t < 0) {
+    printf("O valor da cor da faixa de destaque deve estar entre 0 e %d\n", maxGray);
+    return;
+  }
+
+  if (shouldReduceIntensityOutsideHighlightRange) {
+    printf("Digite o valor das cores fora da faixa de destaque: ");
+
+    scanf("%d", &r);
+
+    if (r > maxGray || r < 0) {
+      printf("O valor das cores fora da faixa de destaque deve estar entre 0 e %d\n", maxGray);
+      return;
+    }
+  }
+
+  int element;
+  for (int i=0; i<rows; i++) {
+    for (int j=0; j<columns; j++) {
+      fscanf(image, "%d", &element);
+
+      if (element >= a && element <= b) {
+        fprintf(highlightImage, "%d\n", t);
+      } else {
+        fprintf(highlightImage, "%d\n", shouldReduceIntensityOutsideHighlightRange ? r : element);
+      }
+    }
+  }
+
+  fclose(highlightImage);
+}

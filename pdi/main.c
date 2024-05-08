@@ -4,25 +4,13 @@
 #include<getopt.h>
 #include"operations.h"
 
-const struct option options[] = {
-  {"darken", required_argument, 0, 'd'},
-  {"brighten", required_argument, 0, 'b'},
-  {"negative", no_argument, 0, 'n'},
-  {"rotate90", no_argument, 0, 0},
-  {"rotate180", no_argument, 0, 0},
-  {"rotate270", no_argument, 0, 0},
-  {"mirrorh", no_argument, 0, 'h'},
-  {"mirrorv", no_argument, 0, 'v'},
-  {"binarization", required_argument, 0, 'i'},
-  {"middleGrayLevel", required_argument, 0, 'g'},
-};
+void getArguments(int argc, char *argv[], const struct option *options, const char **operation, int *p) {
+  int options_length = 0;
+  while (strlen(options[options_length].name) > 1) options_length++;
 
-void getArguments(int argc, char *argv[], char **operation, int *p) {
-  int options_size = sizeof(options) / sizeof(options[0]);
-
-  char short_options[options_size];
+  char short_options[options_length * 2];
   int short_options_index = -1;
-  for (int i = 0; i < options_size; i++) {
+  for (int i = 0; i < options_length; i++) {
     if (options[i].val != 0) {
       short_options_index++;
       short_options[short_options_index] = options[i].val;
@@ -34,47 +22,40 @@ void getArguments(int argc, char *argv[], char **operation, int *p) {
     }
   }
 
-  int opt;
-  int option_index = 0;
-  while ((opt = getopt_long(argc, argv, short_options, options, &option_index)) != -1) {
-    printf("opt: %c\n", opt);
-    switch (opt) {
-      case 'd':
-        *operation = "darken";
-        *p = atoi(optarg);
+  short_options[short_options_index + 1] = '\0';
+
+  int optindex = -1;
+  int opt = getopt_long(argc, argv, short_options, options, &optindex);
+
+  if (opt == '?') {
+    printf("Argumento inválido\n");
+    exit(1);
+  }
+
+  if (opt == -1) {
+    printf("Nenhum argumento passado\n");
+    exit(1);
+  }
+
+  if (optindex == -1) {
+    for (int i = 0; i < options_length; i++) {
+      if (options[i].val == opt) {
+        optindex = i;
         break;
-      case 'b':
-        *operation = "brighten";
-        *p = atoi(optarg);
-        break;
-      case 'n':
-        *operation = "negative";
-        break;
-      case 'h':
-        *operation = "mirrorh";
-        break;
-      case 'v':
-        *operation = "mirrorv";
-        break;
-      case 'i':
-        *operation = "binarization";
-        *p = atoi(optarg);
-        break;
-      case 'g':
-        *operation = "middleGrayLevel";
-        *p = atoi(optarg);
-        break;
-      case 0:
-        if (strcmp(options[option_index].name, "rotate90") == 0) {
-          *operation = "rotate90";
-        } else if (strcmp(options[option_index].name, "rotate180") == 0) {
-          *operation = "rotate180";
-        } else if (strcmp(options[option_index].name, "rotate270") == 0) {
-          *operation = "rotate270";
-        }
-        break;
+      }
+    }
+
+    if (optindex == -1) {
+      printf("Argumento inválido\n");
+      exit(1);
     }
   }
+
+  if (optarg != NULL) {
+    *p = atoi(optarg);
+  }
+
+  *operation = options[optindex].name;
 }
 
 void loadInputImage(FILE * image, int *rows, int *columns, int *maxGray) {
@@ -92,12 +73,27 @@ void loadInputImage(FILE * image, int *rows, int *columns, int *maxGray) {
 
 int main(int argc, char *argv[]) {
   // Pode ser: darken, brighten, negative, rotate90, rotate180, rotate270, mirror
-  char * operation = "\0";
+  const char *operation = NULL;
   // Parâmetro para as operações darken e brighten
   int p = -1;
 
+  const struct option options[] = {
+    {"darken", required_argument, 0, 'd'},
+    {"brighten", required_argument, 0, 'b'},
+    {"negative", no_argument, 0, 'n'},
+    {"rotate90", no_argument, 0, 0},
+    {"rotate180", no_argument, 0, 0},
+    {"rotate270", no_argument, 0, 0},
+    {"mirrorh", no_argument, 0, 'h'},
+    {"mirrorv", no_argument, 0, 'v'},
+    {"binarization", required_argument, 0, 'i'},
+    {"middleGrayLevel", required_argument, 0, 'g'},
+    {"highlight", no_argument, 0, 'l'},
+    {"highlightWithReduction", no_argument, 0, 'r'}
+  };
+
   // Recebe os argumentos passados para o programa
-  getArguments(argc, argv, &operation, &p);
+  getArguments(argc, argv, options, &operation, &p);
 
   // Imprime os argumentos recebidos
   printf("p: %d\n", p);
@@ -137,6 +133,10 @@ int main(int argc, char *argv[]) {
     binarization(image, rows, columns, maxGray, p);
   } else if (strcmp(operation, "middleGrayLevel") == 0) {
     middleGrayLevel(image, rows, columns, maxGray, p);
+  } else if (strcmp(operation, "highlight") == 0) {
+    highlight(image, rows, columns, maxGray, 0);
+  } else if (strcmp(operation, "highlightWithReduction") == 0) {
+    highlight(image, rows, columns, maxGray, 1);
   } else {
     printf("Operação inválida\n");
   }

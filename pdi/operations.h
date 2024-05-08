@@ -13,6 +13,7 @@ void mirrorh(FILE * image, int rows, int columns, int maxGray);
 void mirrorv(FILE * image, int rows, int columns, int maxGray);
 void binarization(FILE * image, int rows, int columns, int maxGray, int k);
 void middleGrayLevel(FILE * image, int rows, int columns, int maxGray, int l);
+void highlight(FILE * image, int rows, int columns, int maxGray, int shouldReduceIntensityOutsideHighlightRange);
 
 typedef struct {
   char * name;

@@ -35,3 +35,11 @@ Binarização:
 Nível médio de cinza:
   ./program -g <l>
   ./program --middleGrayLevel <l>
+
+Destacar faixa:
+  ./program -l
+  ./program --highlight
+
+Destacar faixa com mudança das outras cores:
+  ./program -l
+  ./program --highlightWithReduction
