@@ -59,20 +59,22 @@ void getArguments(int argc, char *argv[], const struct option *options, const ch
 }
 
 void loadInputImage(FILE * image, int *rows, int *columns, int *maxGray) {
-  char * imageType = malloc(2 * sizeof(char));
-  fscanf(image, "%s", imageType);
+  char imageType[2];
+  fscanf(image, "%s", &imageType);
 
   if (strcmp(imageType, "P2") != 0) {
     printf("O arquivo não é do tipo P2\n");
     exit(1);
   }
 
+  free(imageType);
+
   fscanf(image, "%d %d", rows, columns);
   fscanf(image, "%d", maxGray);
 }
 
 int main(int argc, char *argv[]) {
-  // Pode ser: darken, brighten, negative, rotate90, rotate180, rotate270, mirror
+  // Pode ser: darken, brighten, negative, rotate90, rotate180, rotate270, mirrorh, mirrorv, binarization, middleGrayLevel, highlight, highlightWithReduction
   const char *operation = NULL;
   // Parâmetro para as operações darken e brighten
   int p = -1;

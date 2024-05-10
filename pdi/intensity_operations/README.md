@@ -1,4 +1,9 @@
+## Uso
+
 Compilar: gcc main.c operations.c -o program
+Executar: ./program <operation> <p,k,l?>
+
+## Operações disponíveis para executar
 
 Escurecer:
   ./program --darken <p>
@@ -36,10 +41,10 @@ Nível médio de cinza:
   ./program -g <l>
   ./program --middleGrayLevel <l>
 
-Destacar faixa:
+Destacar faixa de cores:
   ./program -l
   ./program --highlight
 
-Destacar faixa com mudança das outras cores:
+Destacar faixa de cores com mudança das outras cores fora da faixa:
   ./program -l
   ./program --highlightWithReduction
