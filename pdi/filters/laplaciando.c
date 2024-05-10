@@ -1,7 +1,5 @@
 #include<stdio.h>
 
-#define IMAGE_VERSION 0
-
 int filterMask[3][3] = {
   {-1, -1, -1},
   {-1, 8, -1},
